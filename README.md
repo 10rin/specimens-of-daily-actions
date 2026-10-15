@@ -15,7 +15,6 @@
 
 人は結果だけでなく、そこに至るプロセスにも価値を感じている。合理化で消えつつある所作を「標本」として残し、その価値に改めて気づくきっかけをつくる。
 
-We recorded seven everyday actions—cleaning, paying, boiling, brewing, writing, lighting, and listening—in two ways: the way they were done before optimization, and the way they are done today. As technology advances, everyday actions become shorter and quieter, and we no longer notice the textures, sounds, and time that were part of them. Believing that people value not only outcomes but also the process, we preserved these disappearing actions as "specimens."
 
 ### 生活所作標本 / Specimens of Daily Actions
 合理化される前の所作。
