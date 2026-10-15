@@ -1,0 +1,456 @@
+<title>生活所作標本</title>
+<meta name="description" content="生活所作標本 / 生活合理所作標本 — 7つの所作を録音した2枚のMP3アルバム。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap">
+<style>
+/* Layout: Apple Music for Mac — transport bar at the bottom, library sidebar, album view, synced-lyrics column. Phone: album tabs, mini player at the bottom, lyrics as a full sheet. */
+:root{
+  --bg:#ffffff;
+  --surface:#ffffff;
+  --raised:#f3f3f3;
+  --ink:#222222;
+  --mute:#8a8a8a;
+  --line:#e6e6e6;
+  --accent:#222222;
+  --accent-ink:#ffffff;
+  --display:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",-apple-system,sans-serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Noto Sans JP","Hiragino Sans","Helvetica Neue",sans-serif;
+  --bar-h:64px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161616;--surface:#161616;--raised:#262626;--ink:#e8e8e8;--mute:#8e8e8e;--line:#2e2e2e;--accent:#e8e8e8;--accent-ink:#161616;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161616;--surface:#161616;--raised:#262626;--ink:#e8e8e8;--mute:#8e8e8e;--line:#2e2e2e;--accent:#e8e8e8;--accent-ink:#161616;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:12px;-webkit-font-smoothing:antialiased}
+b,strong{font-weight:400}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.ico{width:20px;height:20px;fill:currentColor;display:block}
+
+.app{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;grid-template-columns:220px minmax(0,1fr) auto;grid-template-areas:"side main lyr" "bar bar bar"}
+
+/* ---------- transport bar ---------- */
+.bar{grid-area:bar;display:grid;grid-template-columns:220px minmax(0,1fr) 220px;align-items:center;gap:16px;min-height:var(--bar-h);padding:8px 20px calc(8px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line)}
+.transport{display:flex;align-items:center;gap:18px;color:var(--ink)}
+.transport button{display:grid;place-items:center;width:32px;height:32px;border-radius:50%}
+.transport button:hover{background:var(--raised)}
+.transport .play .ico{width:26px;height:26px}
+.lcd{justify-self:center;width:min(560px,100%);display:grid;grid-template-columns:44px minmax(0,1fr);gap:10px;align-items:center;min-width:0}
+.lcd img{width:44px;height:44px;border-radius:3px;display:block;object-fit:cover}
+.lcd-text{min-width:0;text-align:center;line-height:1.3}
+.lcd-title{font-family:var(--display);font-size:11px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcd-sub{font-size:9px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{display:grid;grid-template-columns:3.2em minmax(0,1fr) 3.2em;align-items:center;gap:6px;font-size:9px;color:var(--mute);font-variant-numeric:tabular-nums}
+.prog span:last-child{text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:14px;background:transparent;margin:0;cursor:pointer;--p:0%}
+input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:2px;background:linear-gradient(to right,var(--ink) var(--p),var(--line) var(--p))}
+input[type=range]::-moz-range-track{height:3px;border-radius:2px;background:linear-gradient(to right,var(--ink) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;border-radius:50%;background:var(--ink);margin-top:-3px;opacity:0;transition:opacity .15s}
+input[type=range]::-moz-range-thumb{width:9px;height:9px;border:0;border-radius:50%;background:var(--ink);opacity:0}
+input[type=range]:hover::-webkit-slider-thumb,input[type=range]:focus-visible::-webkit-slider-thumb{opacity:1}
+input[type=range]:hover::-moz-range-thumb{opacity:1}
+.bar-right{justify-self:end;display:flex;gap:8px}
+.toggle{display:grid;place-items:center;width:32px;height:32px;border-radius:6px;color:var(--mute)}
+.toggle:hover{background:var(--raised)}
+.toggle[aria-pressed="true"]{color:var(--accent);background:var(--raised)}
+
+/* ---------- sidebar ---------- */
+.side{grid-area:side;border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:6px;overflow-y:auto;background:var(--bg)}
+.side h2{font-size:9px;font-weight:400;letter-spacing:.06em;color:var(--mute);margin:0 8px 6px}
+.album-link{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:center;padding:6px 8px;border-radius:6px;text-align:left}
+.album-link img{width:36px;height:36px;border-radius:3px;display:block}
+.album-link b{display:block;font-family:var(--display);font-weight:400;font-size:11px}
+.album-link small{display:block;color:var(--mute);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.album-link:hover{background:var(--raised)}
+.album-link[aria-current="true"]{background:var(--raised)}
+.side-note{margin-top:auto;padding:12px 8px 0;border-top:1px solid var(--line);font-size:9px;line-height:1.7;color:var(--mute)}
+
+/* ---------- album view ---------- */
+.main{grid-area:main;overflow-y:auto;padding:32px 40px 48px;min-width:0}
+.head{display:grid;grid-template-columns:240px minmax(0,1fr);gap:32px;align-items:end;max-width:960px}
+.cover{width:100%;aspect-ratio:1;max-width:100%;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.08),0 12px 32px rgba(0,0,0,.12);display:block;object-fit:cover}
+.meta{min-width:0;display:flex;flex-direction:column;gap:6px}
+.meta h1{font-family:var(--display);font-weight:400;font-size:clamp(22px,2.8vw,30px);letter-spacing:.04em;margin:0;line-height:1.2;text-wrap:balance}
+.meta .en{font-family:var(--display);font-size:13px;color:var(--mute);margin:0}
+.meta .artist{font-size:15px;color:var(--accent);font-weight:400;margin:4px 0 0}
+.meta .info{font-size:10px;color:var(--mute);margin:0}
+.actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 22px;border-radius:6px;background:var(--accent);color:var(--accent-ink);font-weight:400;font-size:11px}
+.btn.ghost{background:var(--raised);color:var(--accent)}
+.btn .ico{width:14px;height:14px}
+
+.tracks{list-style:none;margin:28px 0 0;padding:0;max-width:960px}
+.tracks{border-top:1px solid var(--line)}
+.track{display:grid;grid-template-columns:32px minmax(0,1fr) minmax(0,1fr) 4em;gap:12px;align-items:center;padding:11px 10px;border-bottom:1px solid var(--line);cursor:pointer}
+.track:hover{background:var(--raised)}
+.track .no{color:var(--mute);text-align:center;font-variant-numeric:tabular-nums}
+.track .t{font-family:var(--display);font-size:12px;min-width:0}
+.track .tool{color:var(--mute);font-size:11px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track .dur{color:var(--mute);text-align:right;font-variant-numeric:tabular-nums}
+.track.is-current .t,.track.is-current .no{color:var(--accent);font-weight:400}
+.eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px}
+.eq i{width:2px;background:var(--accent);height:40%;animation:eq 0.9s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.3s}.eq i:nth-child(3){animation-delay:-.6s}
+.paused .eq i{animation-play-state:paused}
+@keyframes eq{0%,100%{height:30%}50%{height:100%}}
+.foot{max-width:960px;margin-top:16px;padding:0 10px;font-size:10px;color:var(--mute);line-height:1.8}
+.foot p{margin:0}
+
+/* ---------- lyrics ---------- */
+.lyr{grid-area:lyr;width:380px;border-left:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;min-height:0}
+.lyr[hidden]{display:none!important}
+.lyr-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)}
+.lyr-head h2{margin:0;font-size:10px;font-weight:400;color:var(--mute);letter-spacing:.04em}
+.lyr-close{display:none}
+.lyr-body{flex:1;overflow-y:auto;padding:40vh 28px 50vh;scroll-behavior:smooth;mask-image:linear-gradient(to bottom,transparent 0,#000 18%,#000 82%,transparent 100%)}
+.line{display:block;width:100%;text-align:left;padding:10px 0;color:var(--ink);opacity:.28;transition:opacity .35s,transform .35s;transform-origin:left center}
+.line .ja{display:block;font-family:var(--display);font-weight:400;font-size:19px;line-height:1.45;letter-spacing:.02em}
+.line .en{display:block;font-size:11px;margin-top:3px;color:var(--mute)}
+.line .ts{display:block;font-size:9px;color:var(--mute);font-variant-numeric:tabular-nums;margin-bottom:2px}
+.line:hover{opacity:.6}
+.line.past{opacity:.42}
+.line.now{opacity:1}
+.lyr-empty{color:var(--mute);font-family:var(--display);font-size:13px;line-height:1.8}
+
+/* ---------- phone ---------- */
+.tabs{display:none}
+.mini{display:none}
+@media (max-width:900px){
+  .app{grid-template-rows:auto 1fr;grid-template-columns:minmax(0,1fr);grid-template-areas:"tabs" "main"}
+  .bar,.side{display:none}
+  .tabs{grid-area:tabs;display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:12px 16px 0;padding:3px;border-radius:9px;background:var(--raised)}
+  .tabs button{padding:7px 4px;border-radius:7px;font-family:var(--display);font-size:11px;color:var(--mute)}
+  .tabs button[aria-current="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .main{padding:24px 16px calc(var(--bar-h) + 40px + env(safe-area-inset-bottom,0px))}
+  .head{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:20px}
+  .cover{width:min(300px,78vw)}
+  .meta{align-items:center}
+  .actions{justify-content:center;width:100%}
+  .actions .btn{flex:1;justify-content:center;max-width:180px}
+  .track{grid-template-columns:28px minmax(0,1fr) 3.4em;row-gap:2px}
+  .track .t{grid-column:2}
+  .track .tool{grid-column:2;grid-row:2;font-size:10px}
+  .track .dur{grid-column:3;grid-row:1 / span 2}
+  .track .no{grid-row:1 / span 2}
+  .mini{display:grid;position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px 14px 8px;border-radius:12px;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:5}
+  .mini img{width:44px;height:44px;border-radius:4px;display:block}
+  .mini-text{min-width:0;text-align:left;line-height:1.35}
+  .mini-text b{display:block;font-family:var(--display);font-weight:400;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mini-text small{display:block;color:var(--mute);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mini-btns{display:flex;gap:4px}
+  .mini-btns button{display:grid;place-items:center;width:38px;height:38px;border-radius:50%}
+  .mini-btns .ico{width:24px;height:24px}
+  .mini-prog{position:absolute;left:12px;right:12px;bottom:6px;height:2px;border-radius:1px;background:var(--line);overflow:hidden}
+  .mini-prog i{display:block;height:100%;width:0;background:var(--ink)}
+  .lyr{position:fixed;inset:0;width:auto;border:0;z-index:10;padding-top:env(safe-area-inset-top,0px)}
+  .lyr-close{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--raised)}
+  .lyr-body{padding:30vh 24px 50vh}
+  .lyr-prog{display:block}
+}
+.lyr-prog{display:none;padding:12px 24px calc(20px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.lyr-prog .ctl{display:flex;justify-content:center;gap:36px;margin-top:8px}
+.lyr-prog .ctl button{display:grid;place-items:center;width:44px;height:44px}
+.lyr-prog .ctl .ico{width:28px;height:28px}
+
+@media (prefers-reduced-motion:reduce){
+  .lyr-body{scroll-behavior:auto}
+  .line{transition:none}
+  .eq i{animation:none;height:70%}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.4-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4.2" height="16" rx="1"/><rect x="13.8" y="4" width="4.2" height="16" rx="1"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="M11.5 6.2v11.6a.8.8 0 0 1-1.25.66L2.6 13.1a.9.9 0 0 1 0-1.5l7.65-5.36a.8.8 0 0 1 1.25.66zm10 0v11.6a.8.8 0 0 1-1.25.66L12.6 13.1a.9.9 0 0 1 0-1.5l7.65-5.36a.8.8 0 0 1 1.25.66z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M12.5 6.2v11.6a.8.8 0 0 0 1.25.66l7.65-5.36a.9.9 0 0 0 0-1.5l-7.65-5.36a.8.8 0 0 0-1.25.66zm-10 0v11.6a.8.8 0 0 0 1.25.66l7.65-5.36a.9.9 0 0 0 0-1.5L3.75 5.54a.8.8 0 0 0-1.25.66z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M17 3l4 4-4 4V8h-2.2c-1 0-1.9.5-2.5 1.3l-1.1 1.5-1.25-1.67 1-1.33A5 5 0 0 1 14.8 6H17V3zM3 6h3.2a5 5 0 0 1 4 2l5.1 6.7c.6.8 1.5 1.3 2.5 1.3H17v-3l4 4-4 4v-3h-.2a5 5 0 0 1-4-2L7.7 9.3C7.1 8.5 6.2 8 5.2 8H3V6zm0 10h2.2c1 0 1.9-.5 2.5-1.3l1-1.33 1.25 1.66-.65.87A5 5 0 0 1 5.2 18H3v-2z"/></symbol>
+  <symbol id="i-lyrics" viewBox="0 0 24 24"><path d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2v11h2v2l2.3-2H20V5H4zm3 3h10v2H7V8zm0 4h7v2H7v-2z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6 10.6 12 5 6.4z"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <header class="bar">
+    <div class="transport">
+      <button id="b-prev" aria-label="前の曲"><svg class="ico"><use href="#i-prev"/></svg></button>
+      <button id="b-play" class="play" aria-label="再生"><svg class="ico"><use href="#i-play"/></svg></button>
+      <button id="b-next" aria-label="次の曲"><svg class="ico"><use href="#i-next"/></svg></button>
+    </div>
+    <div class="lcd">
+      <img id="lcd-cover" alt="">
+      <div class="lcd-text">
+        <div class="lcd-title" id="lcd-title"></div>
+        <div class="lcd-sub" id="lcd-sub"></div>
+        <div class="prog"><span id="t-cur">0:00</span><input type="range" id="seek" min="0" max="1000" value="0" step="1" aria-label="再生位置"><span id="t-rem">0:00</span></div>
+      </div>
+    </div>
+    <div class="bar-right">
+      <button class="toggle" id="b-lyr" aria-pressed="true" aria-label="歌詞を表示"><svg class="ico"><use href="#i-lyrics"/></svg></button>
+    </div>
+  </header>
+
+  <nav class="side" aria-label="ライブラリ">
+    <h2>アルバム</h2>
+    <div id="side-albums"></div>
+    <div class="side-note">7つの所作を、合理化される前と後の2通りで録音した。同じトラック番号に同じ所作が入っている。</div>
+  </nav>
+
+  <div class="tabs" id="tabs" role="tablist" aria-label="アルバム"></div>
+
+  <main class="main" id="main">
+    <section class="head">
+      <img class="cover" id="cover" alt="">
+      <div class="meta">
+        <h1 id="a-title"></h1>
+        <p class="en" id="a-en"></p>
+        <p class="artist">ambai</p>
+        <p class="info" id="a-info"></p>
+        <div class="actions">
+          <button class="btn" id="a-play"><svg class="ico"><use href="#i-play"/></svg>再生</button>
+          <button class="btn ghost" id="a-shuffle"><svg class="ico"><use href="#i-shuffle"/></svg>シャッフル</button>
+        </div>
+      </div>
+    </section>
+    <ol class="tracks" id="tracks"></ol>
+    <div class="foot" id="foot"></div>
+  </main>
+
+  <aside class="lyr" id="lyr" aria-label="歌詞">
+    <div class="lyr-head">
+      <h2 id="lyr-title">歌詞</h2>
+      <button class="lyr-close" id="lyr-close" aria-label="歌詞を閉じる"><svg class="ico"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="lyr-body" id="lyr-body"></div>
+    <div class="lyr-prog">
+      <div class="prog"><span id="t-cur2">0:00</span><input type="range" id="seek2" min="0" max="1000" value="0" step="1" aria-label="再生位置"><span id="t-rem2">0:00</span></div>
+      <div class="ctl">
+        <button id="b-prev2" aria-label="前の曲"><svg class="ico"><use href="#i-prev"/></svg></button>
+        <button id="b-play2" aria-label="再生"><svg class="ico"><use href="#i-play"/></svg></button>
+        <button id="b-next2" aria-label="次の曲"><svg class="ico"><use href="#i-next"/></svg></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="mini" id="mini">
+    <img id="mini-cover" alt="">
+    <button class="mini-text" id="mini-open" aria-label="歌詞を開く"><b id="mini-title"></b><small id="mini-sub"></small></button>
+    <div class="mini-btns">
+      <button id="b-lyr2" aria-label="歌詞を開く"><svg class="ico"><use href="#i-lyrics"/></svg></button>
+      <button id="b-play3" aria-label="再生"><svg class="ico"><use href="#i-play"/></svg></button>
+      <button id="b-next3" aria-label="次の曲"><svg class="ico"><use href="#i-next"/></svg></button>
+    </div>
+    <div class="mini-prog"><i id="mini-bar"></i></div>
+  </div>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+const ALBUMS = __DATA__;
+
+const $ = id => document.getElementById(id);
+const audio = $('audio');
+const narrow = matchMedia('(max-width:900px)');
+let view = 0;               // 表示中のアルバム
+let cur = null;             // {a, t} 再生中のトラック
+let order = null;           // シャッフル時の順番
+let lineIdx = -1;
+
+const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); };
+const total = a => a.tracks.reduce((n,t) => n + t.dur, 0);
+
+function renderAlbumNav(){
+  $('side-albums').innerHTML = ALBUMS.map((a,i) => `
+    <button class="album-link" data-a="${i}" aria-current="${i===view}">
+      <img src="${a.cover}" alt=""><span><b>${a.title}</b><small>${a.en}</small></span>
+    </button>`).join('');
+  $('tabs').innerHTML = ALBUMS.map((a,i) => `<button role="tab" data-a="${i}" aria-current="${i===view}" aria-selected="${i===view}">${a.title}</button>`).join('');
+  document.querySelectorAll('[data-a]').forEach(b => b.onclick = () => showAlbum(+b.dataset.a));
+}
+
+function showAlbum(i){
+  view = i;
+  const a = ALBUMS[i];
+  $('cover').src = a.cover; $('cover').alt = a.title + ' ジャケット';
+  $('a-title').textContent = a.title;
+  $('a-en').textContent = a.en;
+  $('a-info').textContent = 'サウンドアーカイブ · 2026';
+  $('tracks').innerHTML = a.tracks.map((t,k) => `
+    <li class="track" data-t="${k}" tabindex="0">
+      <span class="no">${k+1}</span>
+      <span class="t">${t.title}</span>
+      <span class="tool">${t.tool}</span>
+      <span class="dur">${fmt(t.dur)}</span>
+    </li>`).join('');
+  $('tracks').querySelectorAll('.track').forEach(el => {
+    const go = () => { order = null; play(view, +el.dataset.t); };
+    el.onclick = go;
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+  });
+  const m = Math.round(total(a)/60);
+  $('foot').innerHTML = `<p>${a.tracks.length}曲、${m}分</p><p>${a.note}</p>`;
+  renderAlbumNav();
+  markCurrent();
+  $('main').scrollTop = 0;
+}
+
+function markCurrent(){
+  document.querySelectorAll('.track').forEach(el => {
+    const on = cur && cur.a === view && cur.t === +el.dataset.t;
+    el.classList.toggle('is-current', on);
+    el.querySelector('.no').innerHTML = on ? '<span class="eq" aria-label="再生中"><i></i><i></i><i></i></span>' : (+el.dataset.t + 1);
+  });
+  $('tracks').classList.toggle('paused', audio.paused);
+}
+
+function load(a, t){
+  cur = {a, t};
+  const al = ALBUMS[a], tr = al.tracks[t];
+  audio.src = tr.src;
+  ['lcd-cover','mini-cover'].forEach(id => $(id).src = al.cover);
+  $('lcd-title').textContent = $('mini-title').textContent = `${tr.title}`;
+  $('lcd-sub').textContent = `${tr.tool} — ${al.title}`;
+  $('mini-sub').textContent = tr.tool;
+  $('lyr-title').textContent = `${tr.title}　${tr.tool}`;
+  renderLyrics();
+  markCurrent();
+  try { history.replaceState(null, '', '#' + tr.id); } catch(e) {}
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({ title: `${tr.title}（${tr.tool}）`, artist: 'ambai', album: al.title + ' / ' + al.en, artwork: [{src: al.cover, sizes: '900x900', type: 'image/jpeg'}] });
+  }
+}
+
+function play(a, t){
+  if (!cur || cur.a !== a || cur.t !== t) load(a, t);
+  audio.play().catch(() => {});
+}
+
+function step(d){
+  if (!cur) { play(view, 0); return; }
+  const n = ALBUMS[cur.a].tracks.length;
+  if (d < 0 && audio.currentTime > 3) { audio.currentTime = 0; return; }
+  if (order) {
+    const p = order.indexOf(cur.t) + d;
+    if (p < 0 || p >= n) { audio.pause(); return; }
+    play(cur.a, order[p]);
+  } else {
+    const k = cur.t + d;
+    if (k < 0) { audio.currentTime = 0; return; }
+    if (k >= n) { audio.pause(); audio.currentTime = 0; return; }
+    play(cur.a, k);
+  }
+}
+
+function togglePlay(){
+  if (!cur) { play(view, 0); return; }
+  audio.paused ? audio.play().catch(() => {}) : audio.pause();
+}
+
+/* ---------- lyrics ---------- */
+function renderLyrics(){
+  lineIdx = -1;
+  const body = $('lyr-body');
+  if (!cur) { body.innerHTML = '<p class="lyr-empty">曲を選ぶと、所作の手順が音に合わせて表示されます。</p>'; return; }
+  const lines = ALBUMS[cur.a].tracks[cur.t].lines;
+  body.innerHTML = lines.map((l,k) => `<button class="line" data-k="${k}"><span class="ts">${fmt(l.t)}</span><span class="ja">${l.ja}</span><span class="en">${l.en}</span></button>`).join('');
+  body.querySelectorAll('.line').forEach(el => el.onclick = () => {
+    audio.currentTime = lines[+el.dataset.k].t + 0.01;
+    if (audio.paused) audio.play().catch(() => {});
+  });
+  body.scrollTop = 0;
+  syncLyrics(true);
+}
+
+function syncLyrics(force){
+  if (!cur) return;
+  const lines = ALBUMS[cur.a].tracks[cur.t].lines, ct = audio.currentTime;
+  let k = -1;
+  for (let i = 0; i < lines.length; i++) { if (lines[i].t <= ct + 0.05) k = i; else break; }
+  if (k === lineIdx && !force) return;
+  lineIdx = k;
+  const els = $('lyr-body').querySelectorAll('.line');
+  els.forEach((el,i) => { el.classList.toggle('now', i === k); el.classList.toggle('past', i < k); });
+  const target = els[Math.max(k,0)];
+  if (target && !$('lyr').hidden) {
+    const body = $('lyr-body');
+    body.scrollTop = target.offsetTop - body.clientHeight * (narrow.matches ? 0.3 : 0.38);
+  }
+}
+
+/* ---------- progress ---------- */
+function setRange(el, v){ el.value = v; el.style.setProperty('--p', (v/10) + '%'); }
+let dragging = false;
+function tick(){
+  const d = audio.duration || (cur ? ALBUMS[cur.a].tracks[cur.t].dur : 0), c = audio.currentTime;
+  const v = d ? Math.round(c/d*1000) : 0;
+  if (!dragging) { setRange($('seek'), v); setRange($('seek2'), v); }
+  $('t-cur').textContent = $('t-cur2').textContent = fmt(c);
+  $('t-rem').textContent = $('t-rem2').textContent = '-' + fmt(d - c);
+  $('mini-bar').style.width = (v/10) + '%';
+  syncLyrics(false);
+}
+['seek','seek2'].forEach(id => {
+  const el = $(id);
+  el.addEventListener('input', () => { dragging = true; el.style.setProperty('--p', (el.value/10) + '%'); });
+  el.addEventListener('change', () => { if (audio.duration) audio.currentTime = el.value/1000 * audio.duration; dragging = false; });
+});
+
+function setPlayIcons(){
+  const icon = audio.paused ? '#i-play' : '#i-pause', label = audio.paused ? '再生' : '一時停止';
+  ['b-play','b-play2','b-play3'].forEach(id => { $(id).querySelector('use').setAttribute('href', icon); $(id).setAttribute('aria-label', label); });
+  $('tracks').classList.toggle('paused', audio.paused);
+}
+
+audio.addEventListener('timeupdate', tick);
+audio.addEventListener('seeked', () => syncLyrics(true));
+audio.addEventListener('loadedmetadata', tick);
+audio.addEventListener('play', setPlayIcons);
+audio.addEventListener('pause', setPlayIcons);
+audio.addEventListener('ended', () => step(1));
+
+$('b-play').onclick = $('b-play2').onclick = $('b-play3').onclick = togglePlay;
+$('b-prev').onclick = $('b-prev2').onclick = () => step(-1);
+$('b-next').onclick = $('b-next2').onclick = $('b-next3').onclick = () => step(1);
+$('a-play').onclick = () => { order = null; play(view, 0); };
+$('a-shuffle').onclick = () => {
+  const n = ALBUMS[view].tracks.length;
+  order = [...Array(n).keys()];
+  for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  play(view, order[0]);
+};
+
+/* 歌詞パネル：Macでは横の列、スマホでは全画面 */
+function setLyrics(open){
+  $('lyr').hidden = !open;
+  $('b-lyr').setAttribute('aria-pressed', String(open));
+  if (open) syncLyrics(true);
+}
+$('b-lyr').onclick = () => setLyrics($('lyr').hidden);
+$('b-lyr2').onclick = $('mini-open').onclick = () => setLyrics(true);
+$('lyr-close').onclick = () => setLyrics(false);
+function fitLayout(){ setLyrics(!narrow.matches); }
+narrow.addEventListener('change', fitLayout);
+
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.setActionHandler('play', () => audio.play());
+  navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+  navigator.mediaSession.setActionHandler('previoustrack', () => step(-1));
+  navigator.mediaSession.setActionHandler('nexttrack', () => step(1));
+}
+
+/* #d03 / #o05 のようなリンクでトラックを開く（再生はボタンを押してから） */
+(function init(){
+  const h = location.hash.slice(1);
+  let a = 0, t = 0;
+  ALBUMS.forEach((al,i) => al.tracks.forEach((tr,k) => { if (tr.id === h) { a = i; t = k; } }));
+  showAlbum(a);
+  load(a, t);
+  fitLayout();
+  setPlayIcons();
+  tick();
+})();
+</script>
